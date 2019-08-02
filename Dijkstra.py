@@ -32,11 +32,14 @@ D,E,4
 E,A,7
 E,D,6
 '''
+
+
 maximum_value = pow(2, 31)
 input_way_edges = []
 list_way_edges = {}
 distance = {}
 distance2 = {}
+candidate_path = {}
 priority_Queue = []
 input_vertex = raw_input().split(',')
 for i in input_vertex[0:]:
@@ -51,7 +54,8 @@ for i in range(0, len(priority_Queue)):
 for i in input_vertex[0:]:
     distance[i] = maximum_value
     distance2[i] = []
-    distance2[i] = [maximum_value]
+    candidate_path[i] = []
+    # distance2[i] = [maximum_value]
 
 '''
 for i in input_vertex[0:]:
@@ -64,6 +68,7 @@ print distance['A'][1]
 
 distance['A'] = 0
 distance2['A'] = [0]
+candidate_path = {}
 input_num_edges = input()
 # priority_Queue[distance] = 0
 for i in range(input_num_edges):
@@ -75,6 +80,7 @@ for i in range(input_num_edges):
 # (윗줄) 여기까지가 input data 정리
 
 while len(priority_Queue) != 0:
+    buff = []
     if distance[priority_Queue[0][0]] >= priority_Queue[0][1]:
         for i in range(len(input_vertex)):
             if graph.is_adjacent(priority_Queue[0][0], input_vertex[i]):
@@ -82,6 +88,15 @@ while len(priority_Queue) != 0:
                     distance[input_vertex[i]] = min(distance[input_vertex[i]], distance[priority_Queue[0][0]] + int(graph.get_cost(priority_Queue[0][0], input_vertex[i])))
                     distance2[input_vertex[i]].extend([min(distance[input_vertex[i]], distance[priority_Queue[0][0]] + int(graph.get_cost(priority_Queue[0][0], input_vertex[i])))])
                     priority_Queue.append([input_vertex[i], distance[input_vertex[i]], priority_Queue[0][0]])
+
+                    buff.append(priority_Queue[0][0])
+                    candidate_path[input_vertex[i]] = priority_Queue[0][0], input_vertex[i], distance[input_vertex[i]]
+                    # candidate_path[input_vertex[i]] = {}
+                    # candidate_path[input_vertex[i]][priority_Queue[0][0]] = distance2[input_vertex[i]]
+
+#                    candidate_path[input_vertex[i]][distance2[input_vertex[i]]] = {}
+#                    candidate_path[input_vertex[i]][distance2[input_vertex[i]][0]].extend([priority_Queue[0][2]])
+#                    candidate_path[input_vertex[i]][distance2[input_vertex[i][0]]].extend([priority_Queue[0][0]])
                     distance2[input_vertex[i]].sort()
 # distance[input_vertex[i]].sort()
         del priority_Queue[0]
@@ -96,6 +111,33 @@ p_distance = sorted(distance.items())
 
 # for i in range(len(p_distance)):
 #    print p_distance[i][1]
+
+
+'''
+target_path.extend('E')
+target_path.extend(candidate_path['E'][0])
+target_path.extend(candidate_path[candidate_path['E'][0]][0])
+'''
+
+target_path = []
+
+
+def find_path1(input_v):
+    target_path.insert(0, candidate_path[input_v][0])
+
+    if candidate_path[input_v][0] == 'A':
+        return target_path
+
+    return find_path1(candidate_path[input_v][0])
+    # candidate_path[start_v][0]
+
+
+start_v = 'E'
+find_path1(start_v)
+target_path.append(start_v)
+print target_path
+
+print sorted(target_path), "cost : ", candidate_path['E'][2]
 
 print distance2
 
