@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 # (up line) use utf-8 coding
 from Graph import Graph
+from Graph2 import Graph2
 graph = Graph(undirected=False)
+graph2 = Graph2(undirected=False)
 # input
 # Line 1: Names of Vertexes, separated by comma(,)
 # ex) A,B,C,D,E,F,G
@@ -76,33 +78,40 @@ input_num_edges = input()
 for i in range(input_num_edges):
     input_data = raw_input().split(',')
     graph.insert(input_data[0], input_data[1], input_data[2])
-    # input_way_edges.append(raw_input().split(','))
-    # list_way_edges[(input_way_edges[i][0], input_way_edges[i][1])] = input_way_edges[i][2]
 
 # (윗줄) 여기까지가 input data 정리
 
 
-def find_path2(input_v):
+def find_path(input_v):
+    '''
+    if priority_Queue[0][0] == 'A' and priority_Queue[0][2] == 'A':
+        target_path.insert(0, priority_Queue[0][0])
+        return 0
+    '''
     target_path.insert(0, f_candidate_path[input_v][0])
-
     if f_candidate_path[input_v][0] == 'A':
         return target_path
 
-    return find_path2(f_candidate_path[input_v][0])
+    return find_path(f_candidate_path[input_v][0])
     # candidate_path[start_v][0]
 
 
 def make_path(sv):
-    find_path2(sv)
-    target_path.append(sv)
-    return target_path
+    if find_path(sv) == 0:
+        return
+    else:
+        target_path.append(sv)
+        return target_path
 
+
+if priority_Queue[0][0] == 'A':
+    priority_Queue[0][2] = 'A'
 
 while len(priority_Queue) != 0:
     if distance[priority_Queue[0][0]] >= priority_Queue[0][1]:
         # input_vertex
         for i in range(len(input_vertex)):
-            f_candidate_path = {}
+            # f_candidate_path = {}
             if graph.is_adjacent(priority_Queue[0][0], input_vertex[i]):
                 if distance[input_vertex[i]] > min(distance[input_vertex[i]], distance[priority_Queue[0][0]] + int(graph.get_cost(priority_Queue[0][0], input_vertex[i]))):
                     distance[input_vertex[i]] = min(distance[input_vertex[i]], distance[priority_Queue[0][0]] + int(graph.get_cost(priority_Queue[0][0], input_vertex[i])))
@@ -112,9 +121,10 @@ while len(priority_Queue) != 0:
                     priority_Queue.append([input_vertex[i], distance[input_vertex[i]], priority_Queue[0][0]])
 
                     f_candidate_path[input_vertex[i]] = [priority_Queue[0][0], input_vertex[i], last_weight]
+                    graph2.insert(priority_Queue[0][0], input_vertex[i], last_weight)
                     # candidate_path[priority_Queue[0][0], input_vertex[i]] = distance2[input_vertex[i]]
 
-                    candidate_path[tuple(make_path(input_vertex[i]))] = last_weight
+                    # candidate_path[tuple(make_path(input_vertex[i]))] = last_weight
                     # candidate_path[tuple(make_path(priority_Queue[0][0]))] = last_weight
                     target_path = []
                     # distance2[input_vertex[i]].pop()
@@ -139,6 +149,8 @@ while len(priority_Queue) != 0:
 p_distance = sorted(distance.items())
 # find_path1 : path 역 트래킹 & 방문한 모든 vertex 반환.
 
+print distance
+print distance2
 
 '''
 start_v = 'E'
