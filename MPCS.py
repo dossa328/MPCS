@@ -79,9 +79,9 @@ def dfs(start, end):
 dfs('A', 'B')
 
 cc = 0
-for i in range(len(all_path2)):
+for i in range(len(candidate_path)):
     cc = 0
-    for j in range(len(all_path2[i])-1):
+    for j in range(len(candidate_path[i])-1):
         cc = cc + int(graph.get_cost(candidate_path[i][j], candidate_path[i][j+1]))
         candidate_path[i].append(cc)
 
