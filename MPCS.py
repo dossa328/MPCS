@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # (up line) use utf-8 coding
 from Graph import Graph
+from copy import deepcopy as c
 graph = Graph(undirected=False)
 maximum_value = pow(2, 31)
 input_way_edges = []
@@ -46,37 +47,25 @@ while len(priority_Queue) != 0:
         del priority_Queue[0]
         priority_Queue = sorted(priority_Queue, key=lambda val: val[1])
 
-graph3 = {
-    'A': ['B'],
-    'B': ['A', 'C', 'H'],
-    'C': ['B', 'D', 'G'],
-    'D': ['C', 'E'],
-    'E': ['D', 'F'],
-    'F': ['E'],
-    'G': ['C'],
-    'H': ['B', 'I', 'J', 'M'],
-    'I': ['H'],
-    'J': ['H', 'K'],
-    'K': ['J', 'L'],
-    'L': ['K'],
-    'M': ['H']
-}
 
-# 모든 A -> E 경로 구하기
+# 모든 A -> E 경로 + W 구하기
+# ---------------------------------------------------------------------
 visit = list()
 stack = list()
 all_path = {}
+candidate_path = []
 
 
 def dfs(start, end):
     visit.append(start)
     stack.append(start)
     if start == end:
-        all_path[start] = stack
-        print stack, all_path
-        print("출력완료")
+        all_path[start] = c(stack)
+        candidate_path.extend((all_path.values()))
+        # print all_path
+        # print("출력완료")
         stack.pop()
-        return
+        return candidate_path
 
     for it in input_vertex:
         if graph.is_adjacent(start, it):
@@ -87,8 +76,21 @@ def dfs(start, end):
     stack.pop()
 
 
-dfs('A', 'E')
-# 경로 구하기 끝
+dfs('A', 'B')
+
+cc = 0
+for i in range(len(all_path2)):
+    cc = 0
+    for j in range(len(all_path2[i])-1):
+        cc = cc + int(graph.get_cost(candidate_path[i][j], candidate_path[i][j+1]))
+        candidate_path[i].append(cc)
+
+
+print candidate_path
+
+# 경로 + 경로 w 구하기 끝
+# ---------------------------------------------------------------------
+
 # print sorted(distance, key=lambda t: t[1])
 
 
