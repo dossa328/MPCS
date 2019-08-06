@@ -21,8 +21,8 @@ for i in range(0, len(priority_Queue)):
 for i in input_vertex[0:]:
     distance[i] = maximum_value
 
-distance['A'] = 0
-distance2['A'] = [0]
+distance['E9'] = 0
+distance2['E9'] = [0]
 input_num_edges = input()
 for i in range(input_num_edges):
     input_data = raw_input().split(',')
@@ -76,14 +76,14 @@ def dfs(start, end):
     stack.pop()
 
 
-dfs('A', 'B')
+dfs('A', 'E')
 
 cc = 0
 for i in range(len(candidate_path)):
     cc = 0
     for j in range(len(candidate_path[i])-1):
         cc = cc + int(graph.get_cost(candidate_path[i][j], candidate_path[i][j+1]))
-        candidate_path[i].append(cc)
+    candidate_path[i].append(cc)
 
 
 print candidate_path
