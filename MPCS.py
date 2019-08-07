@@ -2,6 +2,7 @@
 # (up line) use utf-8 coding
 from Graph import Graph
 from copy import deepcopy as c
+from Allpathweight import ap
 graph = Graph(undirected=False)
 maximum_value = pow(2, 31)
 input_way_edges = []
@@ -9,28 +10,30 @@ list_way_edges = {}
 distance = {}
 priority_Queue = []
 distance2 = {}
+in_start = 'A'
+in_end = 'E'
 input_vertex = raw_input().split(',')
 for i in input_vertex[0:]:
     priority_Queue.append([i, maximum_value, 'x'])
 
 for i in range(0, len(priority_Queue)):
     for j in range(0, 3):
-        if priority_Queue[i][j] == 'A':
+        if priority_Queue[i][j] == in_start:
             priority_Queue[i][j + 1] = 0
 
 for i in input_vertex[0:]:
     distance[i] = maximum_value
 
-distance['E9'] = 0
-distance2['E9'] = [0]
+distance[in_start] = 0
+distance2[in_start] = [0]
 input_num_edges = input()
 for i in range(input_num_edges):
     input_data = raw_input().split(',')
     graph.insert(input_data[0], input_data[1], input_data[2])
 
 # (윗줄) 여기까지가 input data 정리
-if priority_Queue[0][0] == 'A':
-    priority_Queue[0][2] = 'A'
+if priority_Queue[0][0] == in_start:
+    priority_Queue[0][2] = in_start
 
 while len(priority_Queue) != 0:
     if distance[priority_Queue[0][0]] >= priority_Queue[0][1]:
@@ -48,11 +51,15 @@ while len(priority_Queue) != 0:
         priority_Queue = sorted(priority_Queue, key=lambda val: val[1])
 
 
+cost_matrix2 = c(graph.cost_matrix)
+app_path = ap()
+print app_path.out_dfs(in_start, in_end, input_vertex, cost_matrix2)
+'''
 # 모든 A -> E 경로 + W 구하기
 # ---------------------------------------------------------------------
 visit = list()
 stack = list()
-all_path = {}
+all_path = {} 
 candidate_path = []
 
 
@@ -76,7 +83,7 @@ def dfs(start, end):
     stack.pop()
 
 
-dfs('A', 'E')
+dfs(in_start, in_end)
 
 cc = 0
 for i in range(len(candidate_path)):
@@ -90,7 +97,7 @@ print candidate_path
 
 # 경로 + 경로 w 구하기 끝
 # ---------------------------------------------------------------------
-
+'''
 # print sorted(distance, key=lambda t: t[1])
 
 
